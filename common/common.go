@@ -50,7 +50,7 @@ func ForceQuitter(callback ForceCallback,holder bool) {
 	}else{
 		go func() {
 			<-c
-			fmt.Println("[SIGINT force quit]")
+			callback()
 			os.Exit(0)
 		}()
 	}

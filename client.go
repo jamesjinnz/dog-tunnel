@@ -539,8 +539,9 @@ func main() {
 			}
 		}
 	}()
-	common.ForceQuitter(func() {
 
+	common.ForceQuitter(func() {
+		println("client received signal,shutdown")
 	},false)
 
 	loop := func() bool {
