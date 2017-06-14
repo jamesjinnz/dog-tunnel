@@ -7,11 +7,8 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"os"
-	"os/signal"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/vzex/dog-tunnel/admin"
@@ -475,11 +472,10 @@ func main() {
 		}
 		log.Println("admin service start success")
 	}
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-	<-c
-	log.Println("received signal,shutdown")
-	shutdown()
+	common.ForceQuitter(func() {
+		log.Println("received signal,shutdown")
+		shutdown()
+	},true)
 }
 
 func shutdown() {

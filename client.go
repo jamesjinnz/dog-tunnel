@@ -539,8 +539,12 @@ func main() {
 			}
 		}
 	}()
+	common.ForceQuitter(func() {
+
+	},false)
 
 	loop := func() bool {
+
 		if bForceQuit {
 			return true
 		}

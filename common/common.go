@@ -11,6 +11,9 @@ import (
 	"log"
 	"net"
 	"strconv"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 const Version = 0.80
@@ -35,6 +38,22 @@ var headerLen int = 4
 func init() {
 	encodingLen = len(encodingData)
 	headerLen = binary.Size(uint32(1))
+}
+
+type ForceCallback func()
+func ForceQuitter(callback ForceCallback,holder bool) {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	if holder == true {
+		<-c
+		callback()
+	}else{
+		go func() {
+			<-c
+			fmt.Println("[SIGINT force quit]")
+			os.Exit(0)
+		}()
+	}
 }
 
 func Xor(s string) string {
